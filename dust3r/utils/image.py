@@ -68,6 +68,7 @@ def _resize_pil_image(img, long_edge_size):
 def load_images(folder_or_list, size, square_ok=False):
     """ open and convert all images in a list or folder to proper input format for DUSt3R
     """
+    # breakpoint()
     if isinstance(folder_or_list, str):
         print(f'>> Loading images from {folder_or_list}')
         root, folder_content = folder_or_list, sorted(os.listdir(folder_or_list))
@@ -85,11 +86,13 @@ def load_images(folder_or_list, size, square_ok=False):
     supported_images_extensions = tuple(supported_images_extensions)
 
     imgs = []
+    # breakpoint()
     for path in folder_content:
         if not path.endswith(supported_images_extensions):
             continue
         img = exif_transpose(PIL.Image.open(os.path.join(root, path))).convert('RGB')
         W1, H1 = img.size
+        # breakpoint()
         if size == 224:
             # resize short side to 224 (then crop)
             img = _resize_pil_image(img, round(size * max(W1/H1, H1/W1)))
