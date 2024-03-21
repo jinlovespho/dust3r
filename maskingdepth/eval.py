@@ -116,6 +116,7 @@ def eval_metric(pred_depths, gt_depths, data):
 
         valid_mask = np.logical_and(valid_mask, eval_mask)
         
+        # breakpoint()
         # Dust3r scaling 맞춰주기
         scale = np.median(gt_depth[valid_mask]) / np.median(pred_depth[valid_mask])
         pred_depth *= scale

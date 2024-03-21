@@ -10,7 +10,7 @@ import numpy as np
 import torch
 
 
-def use_dust3r(model, inputs):
+def use_dust3r_multi(model, inputs):
 
         in_b, in_c, in_h, in_w = inputs[0]['color'].shape
         
@@ -34,7 +34,9 @@ def use_dust3r(model, inputs):
         
         # Multi view Single view 여기서 바꿔주면 된다.
         images[0]['img'] = inputs[0]['color'] 
-        images[1]['img'] = inputs[0]['color'] 
+        images[1]['img'] = inputs[1]['color'] 
+        
+        # breakpoint()
         
         pairs = make_pairs(images, scene_graph='complete', prefilter=None, symmetrize=True)
         output = inference(pairs, model, device, batch_size=batch_size)
@@ -124,3 +126,4 @@ def use_dust3r(model, inputs):
             (x0, y0), (x1, y1) = viz_matches_im0[i].T, viz_matches_im1[i].T
             pl.plot([x0, x1 + W0], [y0, y1], '-+', color=cmap(i / (n_viz - 1)), scalex=False, scaley=False)
         pl.show(block=True)
+        
