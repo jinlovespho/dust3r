@@ -101,25 +101,25 @@ if __name__ == '__main__':
                 
                 # tensor to numpy
                 img1_np = inputs[0]['color'].squeeze(dim=0).detach().cpu().numpy()
-                img2_np = inputs[1]['color'].squeeze(dim=0).detach().cpu().numpy()
+                # img2_np = inputs[1]['color'].squeeze(dim=0).detach().cpu().numpy()
                 
                 # numpy rescale 
                 img1_np = img1_np.transpose(1,2,0) * 255
-                img2_np = img2_np.transpose(1,2,0) * 255
+                # img2_np = img2_np.transpose(1,2,0) * 255
                 img1_np = img1_np.astype('uint8')
-                img2_np = img2_np.astype('uint8')
+                # img2_np = img2_np.astype('uint8')
                 
                 # add noise
                 img1_corrupt = image_corruption(img1_np, noise_type, noise_degree)
-                img2_corrupt = image_corruption(img2_np, noise_type, noise_degree)
+                # img2_corrupt = image_corruption(img2_np, noise_type, noise_degree)
                 
                 # numpy to tensor
                 img1_t = torch.from_numpy(img1_corrupt)
-                img2_t = torch.from_numpy(img2_corrupt)
+                # img2_t = torch.from_numpy(img2_corrupt)
                 
                 # tensor rescale
                 inputs[0]['color'] = img1_t.permute(2,0,1).unsqueeze(dim=0).float() / 255
-                inputs[1]['color'] = img2_t.permute(2,0,1).unsqueeze(dim=0).float() / 255
+                # inputs[1]['color'] = img2_t.permute(2,0,1).unsqueeze(dim=0).float() / 255
                 
             # use DUST3R multi
             if train_cfg.dust3r_is_multi == True :
@@ -134,17 +134,21 @@ if __name__ == '__main__':
             gt_depth = inputs[0]['depth_gt']
             gt_color = inputs[0]['color']   
 
+            file_path = f'./out_depth/noise/20240327/multiframe'
+            if not os.path.exists(file_path):
+                os.makedirs(f'{file_path}', exist_ok=True)
+
             # save image every 100 iter
             if i % 100 == 0:
                 depth1_scaled = show_depth*50000
                 depth1_np = depth1_scaled.detach().cpu().numpy().astype(np.uint16)
                 
                 if train_cfg.dust3r_is_multi == True:
-                    cv2.imwrite(f'./out_depth/noise/multiFrame/{i}_multiFrame_noise({noise_type}{noise_degree})_depthmap.png', depth1_np)
-                    save_image(inputs[0]['color'], f'./out_depth/noise/multiFrame/{i}_multiFrame_noise({noise_type}{noise_degree})_origImg.png')
+                    cv2.imwrite(f'{file_path}/{i}_multiFrame_noise({noise_type}{noise_degree})_depthmap.png', depth1_np)
+                    save_image(inputs[0]['color'], f'{file_path}/{i}_multiFrame_noise({noise_type}{noise_degree})_origImg.png')
                 else:
-                    cv2.imwrite(f'./out_depth/noise/singleFrame/{i}_singleFrame_noise({noise_type}{noise_degree})_depthmap.png', depth1_np)
-                    save_image(inputs[0]['color'], f'./out_depth/noise/singleFrame/{i}_singleFrame_noise({noise_type}{noise_degree})_origImg.png')
+                    cv2.imwrite(f'{file_path}/{i}_singleFrame_noise({noise_type}{noise_degree})_depthmap.png', depth1_np)
+                    save_image(inputs[0]['color'], f'{file_path}/{i}_singleFrame_noise({noise_type}{noise_degree})_origImg.png')
                 
             eval_loss += total_loss
             # pred_depth.squeeze(dim=1)은 tensor 로 (8,H,W) 이고. pred_depths 는 [] 리스트이다.
@@ -173,15 +177,3 @@ if __name__ == '__main__':
             progress.write(f'####################################################################################\n') 
 
     
-    
-    
-    
-        
-        
-        
-        
-        
-        
-        breakpoint()
-        
-        

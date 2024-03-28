@@ -5,7 +5,7 @@ Train:
   dust3r_is_noise: True
   dust3r_noise_type: 'motion_blur'
   dust3r_noise_degree: 5
-  model_name: 'dust3r_kitti_multiFrame_noise(motionBlur5)'  # EXPERIMENT NAME
+  model_name: 'dust3r_kitti_multiFrame_noise(t-1frame_motionBlur5)'  # EXPERIMENT NAME
   wandb_proj_name: '20240215_MaskingDepth_multiframe'       # PROJECT NAME
   wandb_log_path: '/mnt/ssd2/log/dust3r/wandb/20240319'
   log_path: '/mnt/ssd2/log/dust3r/kitti_test/20240319'  # path to the log file, only works when the wandb option is False.
